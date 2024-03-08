@@ -74,8 +74,8 @@ class _AnimatedSphereState extends State<AnimatedSphere>
               ..rotateY(_rotationY),
             alignment: FractionalOffset.center,
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.9,
+              width: 300,
+              height: 300,
               child: CustomPaint(
                 painter: GlobePainter(),
               ),
