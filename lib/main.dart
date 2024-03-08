@@ -4,6 +4,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'animated_sphere.dart';
+
+
+
 void main() {
   runApp(MyApp());
 }
@@ -16,14 +20,19 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text('Sphere Demo'),
         ),
-        body: Center(
-          child: SphereBall(
-            sphereActionStatus: Icon(
-              Icons.mic_rounded,
-              color: Colors.white,
-              size: 35,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: SphereBall(
+                sphereActionStatus: Icon(
+                  Icons.mic_rounded,
+                  color: Colors.white,
+                  size: 35,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -48,20 +57,26 @@ class _SphereBallState extends State<SphereBall> with SingleTickerProviderStateM
   ];
   int _colorIndex = 0;
   bool opacity = false;
+  late Timer _timer;
+  bool _isMounted = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: Duration(seconds: 5))..repeat();
-    Timer.periodic(Duration(seconds: 2), (timer) {
-      _changeSphereColors();
-      _changeLightSource();
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
+      if (_isMounted) {
+        _changeSphereColors();
+        _changeLightSource();
+      }
     });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _timer.cancel();
+    _isMounted = false;
     super.dispose();
   }
 
@@ -101,51 +116,74 @@ class _SphereBallState extends State<SphereBall> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final size = Size.square(MediaQuery.of(context).size.shortestSide);
-    return GestureDetector(
-      onTap: () {
-        if (_diameter == 150.0) {
-          _changeSize(SizeType.Medium);
-        } else if (_diameter == 110.0) {
-          _changeSize(SizeType.Small);
-        } else {
-          _changeSize(SizeType.Large);
-        }
-        setState(() {
-          opacity = true;
-        });
-        Future.delayed(Duration(seconds: 2), () {
-          setState(() {
-           opacity = false;
-          });
-        });
-        },
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Opacity(
-            opacity: opacity == true ? 1.0 : 1.0 - _controller.value,
-            child: Stack(
-              children: [
-                Transform.rotate(
-                  angle: _controller.value * 2 * math.pi,
-                  child: SphereDensity(
-                    lightSource: lightSource,
-                    diameter: _diameter,
-                    colors: _multiSphereColors[_colorIndex],
-                    child: SizedBox.expand(),
-                  ),
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (_diameter == 150.0) {
+              _changeSize(SizeType.Medium);
+            } else if (_diameter == 110.0) {
+              _changeSize(SizeType.Small);
+            } else {
+              _changeSize(SizeType.Large);
+            }
+            setState(() {
+              opacity = true;
+            });
+            Future.delayed(Duration(seconds: 2), () {
+              setState(() {
+               opacity = false;
+              });
+            });
+            },
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Opacity(
+                opacity: opacity == true ? 1.0 : 1.0 - _controller.value,
+                child: Stack(
+                  children: [
+                    Transform.rotate(
+                      angle: _controller.value * 2 * math.pi,
+                      child: SphereDensity(
+                        lightSource: lightSource,
+                        diameter: _diameter,
+                        colors: _multiSphereColors[_colorIndex],
+                        child: SizedBox.expand(),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: Center(
+                        child: widget.sphereActionStatus,
+                      ),
+                    ),
+
+                  ],
                 ),
-                Positioned.fill(
-                  child: Center(
-                    child: widget.sphereActionStatus,
-                  ),
-                ),
-            
-              ],
+              );
+            },
+          ),
+        ),
+        GestureDetector(
+          onTap: (){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AnimatedSphereScreen(),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50,
+              width: 100,
+              color: Colors.indigoAccent,
+              child: Center(child: Text("3d sphere",style: TextStyle(color: Colors.white),)),
             ),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -216,5 +254,7 @@ class SphereDensity extends StatelessWidget {
     );
   }
 }
+
+
 
 
