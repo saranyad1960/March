@@ -169,7 +169,7 @@ class _SphereBallState extends State<SphereBall> with SingleTickerProviderStateM
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => AnimatedSphereScreen(),
+                builder: (context) => MyApp1(),
               ),
             );
           },
