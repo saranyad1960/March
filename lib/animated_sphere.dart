@@ -8,6 +8,8 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cube/flutter_cube.dart';
 
+import 'global_sphere.dart';
+
 void main() {
   runApp(MyApp1());
 }
@@ -29,6 +31,25 @@ class MyApp1 extends StatelessWidget {
                 child: Column(
                   children: [
                     const SphereBall(),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GlobalSphere(),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50,
+                          width: 100,
+                          color: Colors.indigoAccent,
+                          child: Center(child: Text("Click here",style: TextStyle(color: Colors.white),)),
+                        ),
+                      ),
+                    ),
                   ],
                 )
             )
@@ -194,6 +215,14 @@ class _SphereDensityState extends State<SphereDensity> {
             center: Alignment(this.widget.lightSource.dx, this.widget.lightSource.dy),
             colors:  [Colors.yellow.shade50, Colors.lightGreen],
           ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), // Shadow color
+              spreadRadius: 5, // Spread radius
+              blurRadius: 7, // Blur radius
+              offset: Offset(0, 3), // Offset
+            ),
+          ],
         ),
         child:ClipOval(
           clipper: CircleClipper(this.widget.diameter),

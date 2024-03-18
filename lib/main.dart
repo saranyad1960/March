@@ -179,7 +179,7 @@ class _SphereBallState extends State<SphereBall> with SingleTickerProviderStateM
               height: 50,
               width: 100,
               color: Colors.indigoAccent,
-              child: Center(child: Text("3d sphere",style: TextStyle(color: Colors.white),)),
+              child: Center(child: Text("Click here",style: TextStyle(color: Colors.white),)),
             ),
           ),
         ),
