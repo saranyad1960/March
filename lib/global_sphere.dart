@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_earth_globe/flutter_earth_globe.dart';
+import 'package:flutter_earth_globe/flutter_earth_globe_controller.dart';
+import 'package:flutter_earth_globe/sphere_style.dart';
 
 import 'package:simple_3d/simple_3d.dart';
 import 'package:util_simple_3d/util_simple_3d.dart';
@@ -77,170 +81,261 @@ class _GlobalSphereState extends State<GlobalSphere> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.black.withOpacity(0.1),
         appBar: AppBar(
           title: Text('Global sphere'),
         ),
-        body: Center(
-          child:
-          Transform.rotate(
-            angle: _rotationAngleX,
-            child: Transform.rotate(
-              angle: _rotationAngleY,
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  setState(() {
-                    _rotationAngleX += details.delta.dy / 100;
-                    _rotationAngleY += details.delta.dx / 100;
-                  });
-                },
-                child:
-                AnimatedBuilder(
-                  animation: _animation,
-                  builder: (context, child) {
-                    return Transform.rotate(
-                      angle: _animation.value,
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 255,
-                            height: 255,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                             color: Colors.grey.withOpacity(0.05),
-                            ),
-                          ),
-                          Positioned(
-                            left: 75,
-                            top: 80,
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.red.withOpacity(0.5),
-                              ),
-                             // child: Text("Hi",style: TextStyle(color: Colors.red),),
-                            ),
-                          ),
-                          Positioned(
-                            left: 5,
-                            top: 8,
-                            child: Container(
-                              width: 250,
-                              height: 250,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.green.withOpacity(0.5),
-                               //  gradient: RadialGradient(
-                               //    colors: [
-                               //      Colors.green.withOpacity(0.2),
-                               //      Colors.green.withOpacity(0.1),
-                               //    ],
-                               //    stops: [0.5, 1.0],
-                               //    center: Alignment(0.5, 0.5),
-                               //    radius: 0.5,
-                               //  ),
-                               //  boxShadow: [
-                               //    BoxShadow(
-                               //      color: Colors.green.withOpacity(0.1),
-                               //      blurRadius: 10,
-                               //      spreadRadius: 2,
-                               //      offset: Offset(0, 3),
-                               //    ),
-                               //  ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
+        body: SafeArea(
+          child: Center(
+            child:  MyApp2(),
+            ///
+            // Transform.rotate(
+            //   angle: _rotationAngleX,
+            //   child: Transform.rotate(
+            //     angle: _rotationAngleY,
+            //     child: GestureDetector(
+            //       onPanUpdate: (details) {
+            //         setState(() {
+            //           _rotationAngleX += details.delta.dy / 100;
+            //           _rotationAngleY += details.delta.dx / 100;
+            //         });
+            //       },
+            //       child:
+            //       AnimatedBuilder(
+            //         animation: _animation,
+            //         builder: (context, child) {
+            //           return Transform.rotate(
+            //             angle: _animation.value,
+            //             child:
+            //             Stack(
+            //               children: [
+            //                 Container(
+            //                   width: 255,
+            //                   height: 255,
+            //                   decoration: BoxDecoration(
+            //                     shape: BoxShape.circle,
+            //                    color: Colors.grey.withOpacity(0.05),
+            //                   ),
+            //                 ),
+            //                 Positioned(
+            //                   left: 75,
+            //                   top: 80,
+            //                   child: Container(
+            //                     width: 100,
+            //                     height: 100,
+            //                     decoration: BoxDecoration(
+            //                       shape: BoxShape.circle,
+            //                       color: Colors.red.withOpacity(0.5),
+            //                     ),
+            //                    // child: Text("Hi",style: TextStyle(color: Colors.red),),
+            //                   ),
+            //                 ),
+            //                 Positioned(
+            //                   left: 5,
+            //                   top: 8,
+            //                   child: Container(
+            //                     width: 250,
+            //                     height: 250,
+            //                     decoration: BoxDecoration(
+            //                       shape: BoxShape.circle,
+            //                       color: Colors.green.withOpacity(0.5),
+            //                      //  gradient: RadialGradient(
+            //                      //    colors: [
+            //                      //      Colors.green.withOpacity(0.2),
+            //                      //      Colors.green.withOpacity(0.1),
+            //                      //    ],
+            //                      //    stops: [0.5, 1.0],
+            //                      //    center: Alignment(0.5, 0.5),
+            //                      //    radius: 0.5,
+            //                      //  ),
+            //                      //  boxShadow: [
+            //                      //    BoxShadow(
+            //                      //      color: Colors.green.withOpacity(0.1),
+            //                      //      blurRadius: 10,
+            //                      //      spreadRadius: 2,
+            //                      //      offset: Offset(0, 3),
+            //                      //    ),
+            //                      //  ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ),
-          ///
-          // Container(
-          //   width: 300,
-          //   height: 300,
-          //   child: Object3D(
-          //     zoom: 100.0,
-          //     rotationY: _rotationAngleX,
-          //     rotationX: _rotationAngleY,
-          //     path: "lib/assets/Earth-Erde.jpg",
-          //   ),
-          // ),
         ),
       ),
     );
+  }
+}
+
+class MyApp2 extends StatefulWidget {
+  @override
+  _MyApp2State createState() => _MyApp2State();
+}
+
+class _MyApp2State extends State<MyApp2>  with SingleTickerProviderStateMixin{
+  late FlutterEarthGlobeController _controller ;
+  late Timer _timer;
+  double _rotation = 0.0;
+  late AnimationController _animationController;
+  double _rotationAngle = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = FlutterEarthGlobeController(
+      rotationSpeed: 0.05,
+      isBackgroundFollowingSphereRotation: true,
+     //  background: Image.asset('lib/assets/greenanimation1.jpg').image,
+      surface: Image.asset('lib/assets/greenanimation1.jpg',
+        fit: BoxFit.cover,
+      ).image,
+        sphereStyle: SphereStyle(
+            showShadow: true,
+            shadowBlurSigma: 30,
+          shadowColor: Colors.green.shade500.withOpacity(0.9)),
+    );
+
+
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    );
+
+    _animationController.repeat();
+    _animationController.addListener(() {
+      setState(() {
+        _rotationAngle += 0.01;
+      });
+    });
+
+    // final greenBallImage = ColorFiltered(
+    //   colorFilter: ColorFilter.mode(Colors.green, BlendMode.modulate),
+    //   child: Image.asset(
+    //     'lib/assets/Earth-Erde.jpg',
+    //     fit: BoxFit.cover,
+    //   ),
+    // );
+
+    // _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+    //   setState(() {
+    //     _rotation += _rotationSpeed;
+    //     if (_rotation >= 2 * 3.14159) {
+    //       _rotation = 0.0;
+    //     }
+    //   });
+    // });
+  }
+
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    //_timer.cancel();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      Transform.rotate(
+        angle: _rotationAngle,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: FlutterEarthGlobe(
+                controller: _controller,
+                radius: 50,
+              ),
+           ),
+            Container(
+              width: 150,
+              height: 150,
+              child: Image.asset('lib/assets/redanimations-removebg-preview.png',
+               color: Colors.red.withOpacity(0.5),
+              ),),
+          ],
+        ),
+      );
   }
 }
 
 
 ///
-class RotatableFluffyCircle extends StatefulWidget {
-  @override
-  _RotatableFluffyCircleState createState() => _RotatableFluffyCircleState();
-}
-
-class _RotatableFluffyCircleState extends State<RotatableFluffyCircle> {
-  double _rotationAngleX = 0.0;
-  double _rotationAngleY = 0.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: _rotationAngleX,
-      child: Transform.rotate(
-        angle: _rotationAngleY,
-        child: GestureDetector(
-          onPanUpdate: (details) {
-            setState(() {
-              _rotationAngleX += details.delta.dy / 100;
-              _rotationAngleY += details.delta.dx / 100;
-            });
-          },
-          child: Container(
-            width: 250,
-            height: 250,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.green.withOpacity(0.1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.green.withOpacity(0.1),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red.withOpacity(0.1),
-                ),
-                child: Center(
-                  child: Text(
-                    'Hello',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class RotatableFluffyCircle extends StatefulWidget {
+//   @override
+//   _RotatableFluffyCircleState createState() => _RotatableFluffyCircleState();
+// }
+//
+// class _RotatableFluffyCircleState extends State<RotatableFluffyCircle> {
+//   double _rotationAngleX = 0.0;
+//   double _rotationAngleY = 0.0;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Transform.rotate(
+//       angle: _rotationAngleX,
+//       child: Transform.rotate(
+//         angle: _rotationAngleY,
+//         child: GestureDetector(
+//           onPanUpdate: (details) {
+//             setState(() {
+//               _rotationAngleX += details.delta.dy / 100;
+//               _rotationAngleY += details.delta.dx / 100;
+//             });
+//           },
+//           child: Container(
+//             width: 250,
+//             height: 250,
+//             decoration: BoxDecoration(
+//               shape: BoxShape.circle,
+//               color: Colors.green.withOpacity(0.1),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.green.withOpacity(0.1),
+//                   blurRadius: 10,
+//                   spreadRadius: 2,
+//                   offset: Offset(0, 3),
+//                 ),
+//               ],
+//             ),
+//             child: Center(
+//               child: Container(
+//                 width: 100,
+//                 height: 100,
+//                 decoration: BoxDecoration(
+//                   shape: BoxShape.circle,
+//                   color: Colors.red.withOpacity(0.1),
+//                 ),
+//                 child: Center(
+//                   child: Text(
+//                     'Hello',
+//                     style: TextStyle(
+//                       color: Colors.white,
+//                       fontSize: 12,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 // RotatingSizedBox(
 // width: 200,
 // height: 200,
@@ -252,62 +347,62 @@ class _RotatableFluffyCircleState extends State<RotatableFluffyCircle> {
 // style: TextStyle(fontSize: 20),
 // ),
 // ),
-class RotatingSizedBox extends StatelessWidget {
-  final double width;
-  final double height;
-  final double angle;
-  final Color frontColor;
-  final Color backColor;
-  final Widget child;
+// class RotatingSizedBox extends StatelessWidget {
+//   final double width;
+//   final double height;
+//   final double angle;
+//   final Color frontColor;
+//   final Color backColor;
+//   final Widget child;
+//
+//   const RotatingSizedBox({
+//     Key? key,
+//     required this.width,
+//     required this.height,
+//     required this.angle,
+//     required this.frontColor,
+//     required this.backColor,
+//     required this.child,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Transform(
+//       transform: Matrix4.identity()
+//         ..setEntry(3, 2, 0.001)
+//         ..rotateY(_toRadians(angle)),
+//       alignment: Alignment.center,
+//       child: Stack(
+//         children: [
+//           Positioned(
+//             width: width,
+//             height: height,
+//             child: Container(
+//               color: backColor,
+//               alignment: Alignment.center,
+//             ),
+//           ),
+//           Positioned(
+//             width: width,
+//             height: height,
+//             child: Container(
+//               color: frontColor,
+//               alignment: Alignment.center,
+//               child: child,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   double _toRadians(double degrees) {
+//     return degrees * (3.14159265359 / 180);
+//   }
+// }
 
-  const RotatingSizedBox({
-    Key? key,
-    required this.width,
-    required this.height,
-    required this.angle,
-    required this.frontColor,
-    required this.backColor,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.001)
-        ..rotateY(_toRadians(angle)),
-      alignment: Alignment.center,
-      child: Stack(
-        children: [
-          Positioned(
-            width: width,
-            height: height,
-            child: Container(
-              color: backColor,
-              alignment: Alignment.center,
-            ),
-          ),
-          Positioned(
-            width: width,
-            height: height,
-            child: Container(
-              color: frontColor,
-              alignment: Alignment.center,
-              child: child,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  double _toRadians(double degrees) {
-    return degrees * (3.14159265359 / 180);
-  }
-}
-
-    ///
-    //   MaterialApp(
+///
+//   MaterialApp(
     //     home: Scaffold(
     //       body: Three(
     //         onSceneCreated: (scene) {
@@ -356,8 +451,8 @@ class RotatingSizedBox extends StatelessWidget {
     //     colorRight: Colors.black,
     //   ),
     // ),
-    ///
-    //   three_jsm.DomLikeListenable(
+///
+//   three_jsm.DomLikeListenable(
     //     key: _globalKey,
     //     builder: (BuildContext context) {
     //       return Container(
@@ -478,98 +573,98 @@ class RotatingSizedBox extends StatelessWidget {
 //   }
 // }
 ///
-class RoundedCylinder extends StatelessWidget {
-  final double width;
-  final double height;
-  final Color colorTop;
-  final Color colorBottom;
-  final Color colorLeft;
-  final Color colorRight;
-
-  RoundedCylinder({
-    required this.width,
-    required this.height,
-    required this.colorTop,
-    required this.colorBottom,
-    required this.colorLeft,
-    required this.colorRight,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(width, height),
-      painter: CylinderPainter(
-        colorTop: colorTop,
-        colorBottom: colorBottom,
-        colorLeft: colorLeft,
-        colorRight: colorRight,
-      ),
-    );
-  }
-}
-
-class CylinderPainter extends CustomPainter {
-  final Color colorTop;
-  final Color colorBottom;
-  final Color colorLeft;
-  final Color colorRight;
-
-  CylinderPainter({
-    required this.colorTop,
-    required this.colorBottom,
-    required this.colorLeft,
-    required this.colorRight,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double radius = size.width / 4;
-
-    final Paint paintTop = Paint()..color = colorTop;
-    final Paint paintBottom = Paint()..color = colorBottom;
-    final Paint paintLeft = Paint()..color = colorLeft;
-    final Paint paintRight = Paint()..color = colorRight;
-    canvas.drawArc(
-      Rect.fromCircle(center: Offset(size.width / 2, radius), radius: radius),
-      math.pi,
-      math.pi,
-      true,
-      paintTop,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: Offset(size.width / 2, size.height - radius), radius: radius),
-      0,
-      math.pi,
-      true,
-      paintBottom,
-    );
-
-
-    final Path path = Path()
-      ..moveTo(0, radius)
-      ..arcToPoint(Offset(size.width, radius), radius: Radius.circular(radius))
-      ..lineTo(size.width, size.height - radius)
-      ..arcToPoint(Offset(0, size.height - radius), radius: Radius.circular(radius), clockwise: false)
-      ..close();
-
-    canvas.drawPath(path, paintLeft);
-
-    final Path path2 = Path()
-      ..moveTo(size.width, radius)
-      ..arcToPoint(Offset(0, radius), radius: Radius.circular(radius), clockwise: false)
-      ..lineTo(0, size.height - radius)
-      ..arcToPoint(Offset(size.width, size.height - radius), radius: Radius.circular(radius))
-      ..close();
-
-    canvas.drawPath(path2, paintRight);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
+// class RoundedCylinder extends StatelessWidget {
+//   final double width;
+//   final double height;
+//   final Color colorTop;
+//   final Color colorBottom;
+//   final Color colorLeft;
+//   final Color colorRight;
+//
+//   RoundedCylinder({
+//     required this.width,
+//     required this.height,
+//     required this.colorTop,
+//     required this.colorBottom,
+//     required this.colorLeft,
+//     required this.colorRight,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomPaint(
+//       size: Size(width, height),
+//       painter: CylinderPainter(
+//         colorTop: colorTop,
+//         colorBottom: colorBottom,
+//         colorLeft: colorLeft,
+//         colorRight: colorRight,
+//       ),
+//     );
+//   }
+// }
+//
+// class CylinderPainter extends CustomPainter {
+//   final Color colorTop;
+//   final Color colorBottom;
+//   final Color colorLeft;
+//   final Color colorRight;
+//
+//   CylinderPainter({
+//     required this.colorTop,
+//     required this.colorBottom,
+//     required this.colorLeft,
+//     required this.colorRight,
+//   });
+//
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final double radius = size.width / 4;
+//
+//     final Paint paintTop = Paint()..color = colorTop;
+//     final Paint paintBottom = Paint()..color = colorBottom;
+//     final Paint paintLeft = Paint()..color = colorLeft;
+//     final Paint paintRight = Paint()..color = colorRight;
+//     canvas.drawArc(
+//       Rect.fromCircle(center: Offset(size.width / 2, radius), radius: radius),
+//       math.pi,
+//       math.pi,
+//       true,
+//       paintTop,
+//     );
+//     canvas.drawArc(
+//       Rect.fromCircle(center: Offset(size.width / 2, size.height - radius), radius: radius),
+//       0,
+//       math.pi,
+//       true,
+//       paintBottom,
+//     );
+//
+//
+//     final Path path = Path()
+//       ..moveTo(0, radius)
+//       ..arcToPoint(Offset(size.width, radius), radius: Radius.circular(radius))
+//       ..lineTo(size.width, size.height - radius)
+//       ..arcToPoint(Offset(0, size.height - radius), radius: Radius.circular(radius), clockwise: false)
+//       ..close();
+//
+//     canvas.drawPath(path, paintLeft);
+//
+//     final Path path2 = Path()
+//       ..moveTo(size.width, radius)
+//       ..arcToPoint(Offset(0, radius), radius: Radius.circular(radius), clockwise: false)
+//       ..lineTo(0, size.height - radius)
+//       ..arcToPoint(Offset(size.width, size.height - radius), radius: Radius.circular(radius))
+//       ..close();
+//
+//     canvas.drawPath(path2, paintRight);
+//   }
+//
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }
 // class ThreeDScene extends StatefulWidget {
 //   @override
 //   _ThreeDSceneState createState() => _ThreeDSceneState();
