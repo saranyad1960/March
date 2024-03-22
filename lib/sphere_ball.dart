@@ -2,73 +2,33 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:vaicon/sphere_ball.dart';
 import 'dart:math' as math;
 
 import 'animated_sphere.dart';
-import 'chat_app.dart';
 
 
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp5());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp5 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyAppHome(),
-    );
-  }
-}
-
-class MyAppHome extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Hi'),
-      ),
-      body: Center(
-        child: Column(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Sphere Demo'),
+        ),
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyApp5(),
-                  ),
-                );
-              },
-              child: Container(
-                color: Colors.red,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Click here to see animated sphere",style: TextStyle(color: Colors.white),),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyApp6(),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.red,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Click here to see chat app",style: TextStyle(color: Colors.white),),
-                  ),
+            Center(
+              child: SphereBall(
+                sphereActionStatus: Icon(
+                  Icons.mic_rounded,
+                  color: Colors.white,
+                  size: 35,
                 ),
               ),
             ),
@@ -78,7 +38,6 @@ class MyAppHome extends StatelessWidget {
     );
   }
 }
-
 
 class SphereBall extends StatefulWidget {
   final Widget sphereActionStatus;
@@ -173,10 +132,10 @@ class _SphereBallState extends State<SphereBall> with SingleTickerProviderStateM
             });
             Future.delayed(Duration(seconds: 2), () {
               setState(() {
-               opacity = false;
+                opacity = false;
               });
             });
-            },
+          },
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {

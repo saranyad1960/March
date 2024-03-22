@@ -42,6 +42,9 @@ dependencies:
 #  flutter_gl: ^0.0.21
 #  three_dart_jsm: ^0.0.10
   simple_3d_renderer: ^19.1.0
+  web_socket_channel: ^2.3.0
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.2
 
 
 dev_dependencies:
