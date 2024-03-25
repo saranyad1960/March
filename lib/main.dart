@@ -7,6 +7,7 @@ import 'dart:math' as math;
 
 import 'animated_sphere.dart';
 import 'chat_app.dart';
+import 'messages.dart';
 
 
 
@@ -57,7 +58,7 @@ class MyAppHome extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyApp6(),
+                    builder: (context) => MyApp7(),
                   ),
                 );
               },

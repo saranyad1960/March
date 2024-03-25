@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'messages.dart';
+
 void main() {
   runApp(MyApp6());
 }
@@ -70,14 +72,23 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            Icon(Icons.arrow_back),
+            GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp7(),
+                    ),
+                  );
+                },
+                child: Icon(Icons.arrow_back)),
             SizedBox(width: 10,),
             Container(
               height: 50,
               width: 50,
               decoration: BoxDecoration(
                borderRadius: BorderRadius.circular(50),
-               border: Border.all(color: Colors.deepPurple, width: 2),
+               border: Border.all(color: Colors.blue.shade800, width: 2),
                 color:Colors.white,
              ),
               child: Padding(
